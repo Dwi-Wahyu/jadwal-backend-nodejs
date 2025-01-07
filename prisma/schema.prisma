@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model peminjaman {
+  id               String  @id @default(uuid())
+  mulai            String
+  selesai          String
+  tanggal          String
+  aktivitas        String
+  instansi         String
+  nama_ruangan     String
+  nomor_wa         String
+  penanggung_jawab String
+  surat_permohonan String
+  status           String  @default("Belum Approve")
+  ruangan          ruangan @relation(fields: [nama_ruangan], references: [nama], map: "peminjaman_nama_ruangan_fkey")
+
+  @@index([nama_ruangan], map: "peminjaman_nama_ruangan_fkey")
+}
+
+model jadwal {
+  id               String  @id @default(uuid())
+  mulai            String
+  selesai          String
+  tanggal          String
+  aktivitas        String
+  nama_ruangan     String
+  ruangan          ruangan @relation(fields: [nama_ruangan], references: [nama], map: "jadwal_nama_ruangan_fkey")
+
+  @@index([nama_ruangan], map: "jadwal_nama_ruangan_fkey")
+}
+
+model pengguna {
+  id       String @id @default(uuid())
+  email    String @unique(map: "Pengguna_email_key")
+  password String @unique(map: "Pengguna_password_key")
+  role     String
+  nama     String @unique(map: "Pengguna_nama_key")
+}
+
+model ruangan {
+  id                String              @id @default(uuid())
+  nama              String              @unique(map: "Ruangan_nama_key")
+  kapasitas         Int
+  kategori          String
+  jadwal jadwal[]
+  peminjaman peminjaman[]
+}
