@@ -17,7 +17,7 @@ const verifyToken = require("./middleware/auth");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
-app.use(cors({ origin: "http://41.216.186.45:8004/" }));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
