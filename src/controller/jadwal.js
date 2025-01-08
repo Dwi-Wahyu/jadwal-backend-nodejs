@@ -113,8 +113,6 @@ jadwalController.updateJadwal = async (req, res) => {
 jadwalController.getJadwal = async (req, res) => {
   const { per_page, page, tanggal, ruangan } = req.query;
 
-  log("dikunjungi");
-
   const totalDatas = await prisma.jadwal.count();
   const filtered = await prisma.jadwal.count({
     where: {

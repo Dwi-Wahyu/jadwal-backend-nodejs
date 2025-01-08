@@ -4,6 +4,8 @@ const multer = require("multer");
 const path = require("path");
 const peminjamanController = require("../controller/peminjaman");
 
+const verifyToken = require("../../middleware/auth");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(process.cwd(), "public", "surat_permohonan"));
@@ -18,13 +20,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.get("/", peminjamanController.getAllPeminjaman);
+router.get("/", verifyToken, peminjamanController.getAllPeminjaman);
 
-router.get("/data", peminjamanController.getPeminjaman);
+router.get("/data", verifyToken, peminjamanController.getPeminjaman);
 
-router.post("/approve/:id", peminjamanController.approvePeminjaman);
+router.post(
+  "/approve/:id",
+  verifyToken,
+  peminjamanController.approvePeminjaman
+);
 
-router.delete("/tolak/:id", peminjamanController.tolakPeminjaman);
+router.delete("/tolak/:id", verifyToken, peminjamanController.tolakPeminjaman);
 
 router.post(
   "/",

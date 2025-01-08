@@ -33,7 +33,9 @@ router.post("/login", async (req, res) => {
     expiresIn: 3600,
   });
 
-  res.status(200).json({ token });
+  console.log(token.user);
+
+  res.status(200).json({ token, user: pengguna });
 });
 
 module.exports = router;
