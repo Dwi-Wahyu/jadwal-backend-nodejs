@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const peminjamanController = require("../controller/peminjaman");
-
 const verifyToken = require("../../middleware/auth");
 
 const storage = multer.diskStorage({
