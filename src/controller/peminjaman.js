@@ -109,6 +109,8 @@ peminjamanController.postPeminjaman = async (req, res) => {
   const mulaiSetelahSelesai = checkMulaiSetelahSelesai(mulai, selesai);
 
   if (mulaiSetelahSelesai) {
+    fs.unlinkSync(req.file.path);
+
     res.status(406).json({
       success: false,
       message: "Waktu Mulai Harus Sebelum Waktu Selesai",
@@ -158,34 +160,18 @@ peminjamanController.getPeminjaman = async (req, res) => {
   const totalDatas = await prisma.peminjaman.count();
   const filtered = await prisma.peminjaman.count({
     where: {
-      status: {
-        contains: status,
-      },
-      tanggal: {
-        contains: tanggal,
-      },
-      ruangan: {
-        id: {
-          contains: ruangan,
-        },
-      },
+      ...(status && { status: { equals: status } }),
+      ...(tanggal && { tanggal: { contains: tanggal } }),
+      ...(ruangan && { ruangan: { id: { contains: ruangan } } }),
     },
   });
   const paged = await prisma.peminjaman.findMany({
     skip: (page - 1) * per_page,
     take: parseInt(per_page),
     where: {
-      status: {
-        contains: status,
-      },
-      tanggal: {
-        contains: tanggal,
-      },
-      ruangan: {
-        id: {
-          contains: ruangan,
-        },
-      },
+      ...(status && { status: { equals: status } }),
+      ...(tanggal && { tanggal: { contains: tanggal } }),
+      ...(ruangan && { ruangan: { id: { contains: ruangan } } }),
     },
   });
 

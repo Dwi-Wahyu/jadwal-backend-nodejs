@@ -14,7 +14,7 @@ const path = require("path");
 const jadwalController = require("./src/controller/jadwal");
 const verifyToken = require("./middleware/auth");
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/api/surat", express.static("surat"));
 
 app.use(express.json());
 app.use(cors());
@@ -28,9 +28,5 @@ app.use("/api/jadwal", jadwalRoutes);
 app.use("/api/peminjaman", peminjamanRoutes);
 
 app.get("/api/data-jadwal", verifyToken, jadwalController.getJadwal);
-
-app.all("*", (req, res) => {
-  res.status(404).json({ message: "End point not found" });
-});
 
 app.listen(3001, () => console.log("http://localhost:3001"));
