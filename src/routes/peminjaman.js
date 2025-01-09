@@ -7,7 +7,7 @@ const verifyToken = require("../../middleware/auth");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(process.cwd(), "public", "surat_permohonan"));
+    cb(null, path.join(process.cwd(), "surat"));
   },
   filename: function (req, file, cb) {
     cb(

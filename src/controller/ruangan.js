@@ -30,6 +30,44 @@ ruanganController.getAllRuangan = async (req, res) => {
   }
 };
 
+ruanganController.deleteRuangan = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const del = await prisma.ruangan.delete({
+      where: {
+        id,
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Berhasil hapus ruangan" });
+  } catch (error) {
+    res.status(500).json({ success: false, error });
+  }
+};
+
+ruanganController.updateRuangan = async (req, res) => {
+  const { id } = req.params;
+  const { nama, kapasitas, kategori } = req.body;
+
+  try {
+    await prisma.ruangan.update({
+      where: {
+        id,
+      },
+      data: {
+        nama,
+        kapasitas,
+        kategori,
+      },
+    });
+
+    res.status(200).json({ success: true, message: "Berhasil update ruangan" });
+  } catch (error) {
+    res.status(500).json({ success: false, error });
+  }
+};
+
 ruanganController.getRuangan = async (req, res) => {
   const { search, per_page, page } = req.query;
 
