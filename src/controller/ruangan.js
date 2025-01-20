@@ -1,6 +1,60 @@
+require("moment-timezone");
+
+const moment = require("moment");
+moment.tz("Asia/Makassar");
+
 const prisma = require("../libs/prisma");
+const checkRuanganTerpakai = require("../function/checkRuanganTerpakai");
 
 const ruanganController = {};
+
+ruanganController.dashboardData = async (req, res) => {
+  const tanggal = moment().format("YYYY-MM-DD");
+  const waktuSekarang = moment();
+
+  const jumlahRuangan = await prisma.ruangan.count({});
+  const jumlahPeminjaman = await prisma.peminjaman.count({});
+  const jadwalRuanganHariIni = await prisma.ruangan.findMany({
+    where: {
+      jadwal: {
+        some: {
+          tanggal,
+        },
+      },
+    },
+    include: {
+      jadwal: {
+        where: {
+          tanggal,
+        },
+      },
+    },
+  });
+
+  let jumlahRuanganTerpakai = 0;
+
+  for (const ruangan of jadwalRuanganHariIni) {
+    for (const jadwal of ruangan.jadwal) {
+      const start = moment(jadwal.mulai, "HH:mm");
+      const end = moment(jadwal.selesai, "HH:mm");
+
+      if (waktuSekarang.isAfter(start) && waktuSekarang.isBefore(end)) {
+        jumlahRuanganTerpakai += 1;
+        break;
+      }
+    }
+  }
+
+  const jumlahRuanganTersedia = jumlahRuangan - jumlahRuanganTerpakai;
+
+  res.status(200).json({
+    success: true,
+    jumlahRuangan,
+    jumlahPeminjaman,
+    jumlahRuanganTerpakai,
+    jumlahRuanganTersedia,
+  });
+};
 
 ruanganController.postRuangan = async (req, res) => {
   const { nama, kategori, kapasitas } = req.body;
