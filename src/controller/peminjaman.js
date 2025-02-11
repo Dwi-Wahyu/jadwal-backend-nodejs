@@ -61,8 +61,7 @@ peminjamanController.tolakPeminjaman = async (req, res) => {
 
     const suratPath = path.join(
       process.cwd(),
-      "public",
-      "surat_permohonan",
+      "surat",
       peminjamanDitolak.surat_permohonan
     );
 
