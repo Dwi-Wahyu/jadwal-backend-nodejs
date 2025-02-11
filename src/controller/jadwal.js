@@ -46,7 +46,7 @@ jadwalController.postJadwal = async (req, res) => {
   const mulaiSetelahSelesai = checkMulaiSetelahSelesai(mulai, selesai);
 
   if (mulaiSetelahSelesai) {
-    res.status(406).json({
+    res.status(200).json({
       success: false,
       message: "Waktu Mulai Harus Sebelum Waktu Selesai",
     });
@@ -54,7 +54,7 @@ jadwalController.postJadwal = async (req, res) => {
   }
 
   if (ruanganTerpakai) {
-    res.status(406).json({ success: false, message: "Ruangan tidak tersedia" });
+    res.status(200).json({ success: false, message: "Ruangan tidak tersedia" });
     return;
   }
 
@@ -163,7 +163,25 @@ jadwalController.getAllJadwal = async (req, res) => {
 
     res.status(200).json({ data: allJadwal });
   } catch (error) {
-    res.status(301).json({ message: error });
+    res.status(500).json({ error });
+  }
+};
+
+jadwalController.deleteJadwal = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleteQuery = await prisma.jadwal.delete({
+      where: {
+        id,
+      },
+    });
+
+    log(deleteQuery);
+
+    res.status(200).json({ message: "Berhasil menghapus jadwal" });
+  } catch (error) {
+    res.status(500).json({ error });
   }
 };
 

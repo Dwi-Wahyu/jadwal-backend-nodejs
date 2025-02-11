@@ -13,4 +13,6 @@ router.post("/", verifyToken, jadwalController.postJadwal);
 
 router.put("/", verifyToken, jadwalController.updateJadwal);
 
+router.delete("/:id", jadwalController.deleteJadwal);
+
 module.exports = router;
