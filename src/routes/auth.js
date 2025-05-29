@@ -15,6 +15,8 @@ router.post("/login", async (req, res) => {
     },
   });
 
+  console.log(pengguna);
+
   if (!pengguna) {
     return res
       .status(401)
