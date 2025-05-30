@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const prisma = require("../libs/prisma");
 
-const secret_key = process.env.secret_key;
+const secret_key = process.env.SECRET_KEY;
 
 router.post("/login", async (req, res) => {
   const { email, password, alwaysLogin } = req.body;
